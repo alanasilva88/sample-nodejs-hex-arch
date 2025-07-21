@@ -1,0 +1,11 @@
+{
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "src",
+    "assets": [
+      {
+        "include": "common/emailtemplates/**/*",
+        "outDir": "dist"
+      }
+    ]
+  }
+  
