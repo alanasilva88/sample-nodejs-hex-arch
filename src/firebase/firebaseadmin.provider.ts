@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import * as dotenv from 'dotenv';
+import * as path from 'path';
 import { initializeApp, applicationDefault } from 'firebase-admin/app';
 import { DataAccessException } from '../common/exceptions/data-access.exception';
 import { GENERIC_ERROR_MESSAGES } from '../common/constants/error-messages.constants';
@@ -30,7 +31,7 @@ export class FirebaseAdminProvider implements OnModuleInit {
     try {
       if (!admin.apps.length) {
         const credentials = process.env.GOOGLE_APPLICATION_CREDENTIALS
-          ? admin.credential.cert(require(process.env.GOOGLE_APPLICATION_CREDENTIALS) as admin.ServiceAccount)
+          ? admin.credential.cert(require(path.resolve(process.cwd(), process.env.GOOGLE_APPLICATION_CREDENTIALS)) as admin.ServiceAccount)
           : applicationDefault();
 
         initializeApp({

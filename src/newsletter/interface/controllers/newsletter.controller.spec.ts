@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NewsletterController } from './newsletter.controller';
 import { NewsletterDto } from '../dto/newsletter.dto';
-import { FirestoreNewsletterRepository } from '../../infrastructure/firestore/newsletter.repository.adapter';
+import { CreateNewsletterUseCase } from '../../application/use-cases/create-newsletter.use-case';
 
 describe('NewsletterController', () => {
   let controller: NewsletterController;
 
-  const mockRepository = {
-    save: jest.fn(),
+  const mockCreateNewsletterUseCase = {
+    execute: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -15,14 +15,13 @@ describe('NewsletterController', () => {
       controllers: [NewsletterController],
       providers: [
         {
-          provide: FirestoreNewsletterRepository,
-          useValue: mockRepository,
+          provide: CreateNewsletterUseCase,
+          useValue: mockCreateNewsletterUseCase,
         },
       ],
     }).compile();
 
     controller = module.get<NewsletterController>(NewsletterController);
-
   });
 
   afterEach(() => {
@@ -36,18 +35,18 @@ describe('NewsletterController', () => {
   it('should call CreateNewsletterUseCase with valid email', async () => {
     const dto: NewsletterDto = { email: 'test@example.com' };
 
-    mockRepository.save.mockResolvedValueOnce(undefined);
+    mockCreateNewsletterUseCase.execute.mockResolvedValueOnce(undefined);
 
     await controller.subscribe(dto);
 
-    expect(mockRepository.save).toHaveBeenCalledTimes(1);
-    expect(mockRepository.save).toHaveBeenCalledWith({ email: dto.email });
+    expect(mockCreateNewsletterUseCase.execute).toHaveBeenCalledTimes(1);
+    expect(mockCreateNewsletterUseCase.execute).toHaveBeenCalledWith(dto.email);
   });
 
-  it('should throw error if repository fails', async () => {
+  it('should throw error if use case fails', async () => {
     const dto: NewsletterDto = { email: 'fail@example.com' };
-    mockRepository.save.mockRejectedValueOnce(new Error('Firestore error'));
+    mockCreateNewsletterUseCase.execute.mockRejectedValueOnce(new Error('Use case error'));
 
-    await expect(controller.subscribe(dto)).rejects.toThrow('Firestore error');
+    await expect(controller.subscribe(dto)).rejects.toThrow('Use case error');
   });
 });

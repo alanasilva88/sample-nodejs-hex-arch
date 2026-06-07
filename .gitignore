@@ -127,5 +127,4 @@ Thumbs.db
 
 
 # Firebase/Google Cloud credentials
-src/firebase/config/prd-fullstackfy.json
-src/firebase/config/test-fullstackfy.json
+src/firebase/config/newsletter.json
