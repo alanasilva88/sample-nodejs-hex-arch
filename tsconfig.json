@@ -9,8 +9,8 @@
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "outDir": "./dist",
     "rootDir": "./src",
     "strictNullChecks": false

@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
 import { NewsletterController } from './interface/controllers/newsletter.controller';
 import { FirestoreNewsletterRepository } from './infrastructure/firestore/newsletter.repository.adapter';
-import { FirebaseAdminProvider } from '../firebase/firebaseadmin.provider';
+import { CreateNewsletterUseCase } from './application/use-cases/create-newsletter.use-case';
+import { FirebaseModule } from '../firebase/firebase.module';
+import { NEWSLETTER_REPOSITORY } from './domain/ports/newsletter.repository.port';
 
 @Module({
+  imports: [FirebaseModule],
   controllers: [NewsletterController],
-  providers: [FirestoreNewsletterRepository, FirebaseAdminProvider],
+  providers: [
+    {
+      provide: NEWSLETTER_REPOSITORY,
+      useClass: FirestoreNewsletterRepository,
+    },
+    CreateNewsletterUseCase,
+  ],
 })
 export class NewsletterModule {}
